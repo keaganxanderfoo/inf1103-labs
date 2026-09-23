@@ -20,7 +20,8 @@ def generate_report(total_units, failed_attempts):
 
 inventory = 0
 invalid_input = 0
-processed_units = 0
+deliveries = 0
+total_tax = 0
 
 while True:  #Create infinite loop
     stock_quantity = get_valid_input()
@@ -31,15 +32,19 @@ while True:  #Create infinite loop
         invalid_input += 1
 
     inventory = process_delivery(stock_quantity, inventory)
+    deliveries += 1 #Track number of deliveries (E.g No. of Batches)
 
     if inventory > 500:
         print("Inventory has been overstocked")
         break
 
-    tax = calculate_tax(inventory)
+    tax = calculate_tax(stock_quantity)
+    print("Tax for this batch: ", tax)
+    total_tax += tax
 
 
-print(inventory, invalid_input, tax)
+generate_report(inventory, invalid_input)
+print(total_tax)
 
 
         
