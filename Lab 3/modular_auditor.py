@@ -11,6 +11,9 @@ def get_valid_input():
 def process_delivery(current_total, new_value):
     return current_total + new_value
 
+def calculate_tax(amount):
+    return amount * 0.1
+
 inventory = 0
 invalid_input = 0
 processed_units = 0
@@ -24,7 +27,8 @@ while True:  #Create infinite loop
         invalid_input += 1
 
     inventory = process_delivery(stock_quantity, inventory)
-print(inventory, invalid_input)
+    tax = calculate_tax(inventory)
+print(inventory, invalid_input, tax)
 
 
         
