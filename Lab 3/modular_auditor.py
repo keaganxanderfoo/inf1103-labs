@@ -8,6 +8,9 @@ def get_valid_input():
         print("Invalid input, please enter only positive integers")
         return False
 
+def process_delivery(current_total, new_value):
+    return current_total + new_value
+
 inventory = 0
 invalid_input = 0
 processed_units = 0
@@ -20,7 +23,10 @@ while True:  #Create infinite loop
     elif stock_quantity is False:
         invalid_input += 1
 
-print(invalid_input)
+    inventory = process_delivery(stock_quantity, inventory)
+print(inventory, invalid_input)
+
+
         
 
 
