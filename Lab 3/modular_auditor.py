@@ -7,3 +7,10 @@ def get_valid_input():
     else:
         print("Invalid input, please enter only positive integers")
         return False
+
+while True:  #Create infinite loop
+    stock_quantity = get_valid_input()
+
+    if stock_quantity == "quit":
+        break
+    
