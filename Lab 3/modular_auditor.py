@@ -35,16 +35,16 @@ while True:  #Create infinite loop
     inventory = process_delivery(inventory, stock_quantity)
     deliveries += 1 #Tracks number of deliveries (E.g No. of Batches)
 
-    if inventory > 500: 
-        print("Inventory has been overstocked")
-        break
-
     tax = calculate_tax(stock_quantity)
     print("Tax for this delivery: ", tax)
     total_tax += tax #Tracks the total amount taxed across all delivery batches
 
+    if inventory > 500: 
+        print("Inventory has been overstocked")
+        break
 
 generate_report(inventory, invalid_input)
+print(total_tax)
 
         
 
