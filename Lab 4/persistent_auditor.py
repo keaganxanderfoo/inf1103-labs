@@ -52,12 +52,14 @@ def main():
         quantity = get_valid_quantity()
         new_id = get_next_order_id(orders)
         orders.append([new_id, product_name, quantity])
-        save_orders(orders)
+        orders.append([new_id, product_name, quantity])
 
         print()
         print("New Order Added:")
         print(f"{new_id},{product_name},{quantity}")
         print()
+
+        save_orders(orders)
 
 
 if __name__ == "__main__":
