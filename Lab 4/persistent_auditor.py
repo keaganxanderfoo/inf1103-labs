@@ -22,23 +22,32 @@ def load_inventory(filename="inventory.txt"):
     try:
         with open(filename, "r") as f:
             lines = f.readlines()
-            inventory = int(lines[0].strip())
-            history_line = lines[1].strip()
-            if history_line:
-                history = [int(x) for x in history_line.split(",")]
-            else:
-                history = []
-            return inventory, history
+            inventory = 0
+            history = []
+            run_count = 0
+            for line in lines:
+                line = line.strip()
+                if line.startswith("Run"):
+                    run_count += 1
+                elif line.startswith("Total Processed: "):
+                    inventory = int(line.split(":")[1].strip())
+                elif line.startswith("Total Entries:"):
+                    entries_str = line.split(":")[1].strip()
+                    if entries_str:
+                        history = [int(x) for x in entries_str.split(",")]
+            return inventory, history, run_count
     except FileNotFoundError:
-        return 0, []
+        return 0, [], 0
 
-def save_inventory(invetory, history, filename="inventory.txt"):
-    with open(filename, "w") as f:
-        f.write(f"{inventory}\n")
-        f.write(",".join(str(x) for x in history) + "\n")
+def save_inventory(inventory, history, run_number, filename="inventory.txt"):
+    with open(filename, "a") as f:
+        f.write(f"\nRun {run_number}:\n")
+        f.write(f"Total Processed: {inventory}\n")
+        f.write(f"Total Entries: {','.join(str(x) for x in history)}\n")
     print(f"Order successfully saved to {filename}")
 
-inventory, history = load_inventory()
+inventory, history, run_count = load_inventory()
+current_run = run_count + 1
 invalid_input = 0
 deliveries = 0
 total_tax = 0
@@ -47,7 +56,7 @@ while True:  #Create infinite loop
     stock_quantity = get_valid_input()
 
     if stock_quantity == "quit":
-        save_inventory(inventory, history)
+        save_inventory(inventory, history, current_run)
         break
     elif stock_quantity is False:
         invalid_input += 1
@@ -64,7 +73,7 @@ while True:  #Create infinite loop
 
     if inventory > 500: 
         print("Inventory has been overstocked")
-        save_inventory(inventory, history)
+        save_inventory(inventory, history, current_run)
         break
 
 generate_report(inventory, invalid_input)
