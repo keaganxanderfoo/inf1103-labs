@@ -18,6 +18,27 @@ def generate_report(total_units, failed_attempts):
     print("Total Processed Units:", total_units)
     print("Total Invalid Inputs:", failed_attempts)
 
+def load_inventory(filename="inventory.txt"):
+    try:
+        with open(filename, "r") as f:
+            lines = f.readlines()
+            inventory = int(lines[0].strip())
+            history_line = lines[1].strip()
+            if history_line:
+                history = [int(x) for x in history_line.split(",")]
+            else:
+                history = []
+            return inventory, history
+    except FileNotFoundError:
+        return 0, []
+
+def save_inventory(invetory, history, filename="inventory.txt"):
+    with open(filename, "w") as f:
+        f.write(f"{inventory}\n")
+        f.write(",".join(str(x) for x in history) + "\n")
+    print(f"Order successfully saved to {filename}")
+
+inventory, history = load_inventory()
 inventory = 0
 invalid_input = 0
 deliveries = 0
@@ -27,12 +48,15 @@ while True:  #Create infinite loop
     stock_quantity = get_valid_input()
 
     if stock_quantity == "quit":
+        save_inventory(inventory, history)
         break
     elif stock_quantity is False:
         invalid_input += 1
         continue
 
+
     inventory = process_delivery(inventory, stock_quantity)
+    history.append(stock_quantity)
     deliveries += 1 #Tracks number of deliveries (E.g No. of Batches)
 
     tax = calculate_tax(stock_quantity)
@@ -41,6 +65,7 @@ while True:  #Create infinite loop
 
     if inventory > 500: 
         print("Inventory has been overstocked")
+        save_inventory(inventory, history)
         break
 
 generate_report(inventory, invalid_input)
