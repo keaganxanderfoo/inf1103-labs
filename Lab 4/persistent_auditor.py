@@ -20,10 +20,38 @@ def display_orders(orders):
         print(f"{order_id}, {name}, {qty}")
     print()
 
+def get_valid_quantity():
+    while True:
+        quantity = input("Enter Quantity: ")
+        if quantity.isdigit():
+            return int(quantity)
+        else:
+            print("Invalid input, please enter only positive integers")
+
+
+def get_next_order_id(orders):
+    if not orders:
+        return 1001
+    return max(order[0] for order in orders) + 1
+
 
 def main():
     orders = load_orders()
     display_orders(orders)
+
+    while True:
+        product_name = input("Enter Product Name: ")
+        if product_name.lower() == "quit":
+            break
+
+        quantity = get_valid_quantity()
+        new_id = get_next_order_id(orders)
+        orders.append([new_id, product_name, quantity])
+
+        print()
+        print("New Order Added:")
+        print(f"{new_id},{product_name},{quantity}")
+        print()
 
 
 if __name__ == "__main__":
