@@ -39,7 +39,6 @@ def save_inventory(invetory, history, filename="inventory.txt"):
     print(f"Order successfully saved to {filename}")
 
 inventory, history = load_inventory()
-inventory = 0
 invalid_input = 0
 deliveries = 0
 total_tax = 0
