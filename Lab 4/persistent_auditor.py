@@ -46,37 +46,41 @@ def save_inventory(inventory, history, run_number, filename="inventory.txt"):
         f.write(f"Total Entries: {','.join(str(x) for x in history)}\n")
     print(f"Order successfully saved to {filename}")
 
-inventory, history, run_count = load_inventory()
-current_run = run_count + 1
-invalid_input = 0
-deliveries = 0
-total_tax = 0
+def main():
+    inventory, history, run_count = load_inventory()
+    current_run = run_count + 1
+    invalid_input = 0
+    deliveries = 0
+    total_tax = 0
 
-while True:  #Create infinite loop
-    stock_quantity = get_valid_input()
+    while True:  #Create infinite loop
+        stock_quantity = get_valid_input()
 
-    if stock_quantity == "quit":
-        save_inventory(inventory, history, current_run)
-        break
-    elif stock_quantity is False:
-        invalid_input += 1
-        continue
+        if stock_quantity == "quit":
+            save_inventory(inventory, history, current_run)
+            break
+        elif stock_quantity is False:
+            invalid_input += 1
+            continue
 
 
-    inventory = process_delivery(inventory, stock_quantity)
-    history.append(stock_quantity)
-    deliveries += 1 #Tracks number of deliveries (E.g No. of Batches)
+        inventory = process_delivery(inventory, stock_quantity)
+        history.append(stock_quantity)
+        deliveries += 1 #Tracks number of deliveries (E.g No. of Batches)
 
-    tax = calculate_tax(stock_quantity)
-    print("Tax for this delivery: ", tax)
-    total_tax += tax #Tracks the total amount taxed across all delivery batches
+        tax = calculate_tax(stock_quantity)
+        print("Tax for this delivery: ", tax)
+        total_tax += tax #Tracks the total amount taxed across all delivery batches
 
-    if inventory > 500: 
-        print("Inventory has been overstocked")
-        save_inventory(inventory, history, current_run)
-        break
+        if inventory > 500: 
+            print("Inventory has been overstocked")
+            save_inventory(inventory, history, current_run)
+            break
 
-generate_report(inventory, invalid_input)
+    generate_report(inventory, invalid_input)
+
+if __name__ == "__main__":
+    main()
 
         
 
